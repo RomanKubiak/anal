@@ -2,6 +2,8 @@
 #define touchscreen_h_
 #include <XPT2046_Touchscreen.h>
 #include <Bounce2.h>
+#include <ResponsiveAnalogRead.h>
+
 class BouncedTouch : public Bounce
 {
   public:
@@ -11,21 +13,30 @@ class BouncedTouch : public Bounce
     bool readCurrentState(){
       return (ts.touched()); 
     }
-    XPT2046_Touchscreen &getTouchScreen() { return (ts); }
 
   private:
     XPT2046_Touchscreen &ts;
 };
 
 
-struct TouchData
+class AnalTouch
 {
-  uint16_t x;
-  uint16_t y;
-  bool hasChanged;
+  public:
+    AnalTouch();
+    void update();
+    bool changed() { return (touchscreenTouched || touchscreenDragged); }
+    bool dragged() { return (touchscreenDragged); }
+    bool touched() { return (touchscreenTouched); }
+    void begin();
+    int getX();
+    int getY();
+  private:
+    XPT2046_Touchscreen touchscreen;
+    BouncedTouch bouncedTouch;
+    ResponsiveAnalogRead axisX;
+    ResponsiveAnalogRead axisY;
+    bool touchscreenTouched;
+    bool touchscreenDragged;
 };
-
-void beginTouch();
-void updateTouch(TouchData &data);
 
 #endif

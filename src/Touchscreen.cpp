@@ -1,27 +1,52 @@
 #include "Touchscreen.h"
-#include <ResponsiveAnalogRead.h>
 
-static ResponsiveAnalogRead ts_readX(0, false);
-static ResponsiveAnalogRead ts_readY(0, false);
+#define TS_CS_PIN  29
+#define TS_IRQ_PIN 30
 
-void beginTouch()
+AnalTouch::AnalTouch() : 
+  touchscreen(TS_CS_PIN, TS_IRQ_PIN),
+  bouncedTouch(touchscreen),
+  axisX(0,false),
+  axisY(0,false)
 {
-  extern BouncedTouch bouncedTouch;
+}
+
+void AnalTouch::begin()
+{
+  touchscreen.begin();
+  touchscreen.setRotation(3);
   bouncedTouch.attach(0);
   bouncedTouch.interval(15);
 }
 
-void updateTouch(TouchData &data)
+void AnalTouch::update()
 {
-  extern BouncedTouch bouncedTouch;
+  touchscreenTouched = false;
+  touchscreenDragged = false;
+  
   bouncedTouch.update();
-  TS_Point currentTouch = bouncedTouch.getTouchScreen().getPoint();
-      ts_readX.update(map(currentTouch.x,200,3950,0,320));
-      ts_readY.update(map(currentTouch.y, 200, 3800, 0, 240));
-      if (ts_readX.hasChanged() || ts_readY.hasChanged())
-      {
-        data.y = ts_readX.getValue();
-        data.y = ts_readY.getValue();
-        data.hasChanged = true;
-      }
+
+  if (bouncedTouch.rose() || bouncedTouch.fell())
+  {
+    touchscreenTouched = true;
+  }
+
+  TS_Point currentTouch = touchscreen.getPoint();
+  axisX.update(map(currentTouch.x, 200, 3950, 0, 320));
+  axisY.update(map(currentTouch.y, 400, 3700, 0, 240));
+
+  if (axisX.hasChanged() || axisY.hasChanged())
+  {
+    touchscreenDragged = true;
+  }
+}
+
+int AnalTouch::getX()
+{
+  return (axisX.getValue());
+}
+
+int AnalTouch::getY()
+{
+  return (axisY.getValue());
 }

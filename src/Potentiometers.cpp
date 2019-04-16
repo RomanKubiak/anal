@@ -9,7 +9,9 @@ const AnalPin analPotentiometerPins[ANAL_POTENTIOMETER_COUNT] =
   { "green", 33}
 };
 
-AnalPotentiometers::AnalPotentiometers() : metro(Metro(ANAL_POTENTIOMETER_METRO_TIMER))
+AnalPotentiometers::AnalPotentiometers() : metro(Metro(ANAL_POTENTIOMETER_METRO_TIMER)) {}
+
+void AnalPotentiometers::begin()
 {
   for (int i=0; i<ANAL_POTENTIOMETER_COUNT; i++)
   {
@@ -30,7 +32,6 @@ void AnalPotentiometers::update()
     potentiometers[currentPotentiometerToUpdate]->update();
     if (potentiometers[currentPotentiometerToUpdate]->hasChanged())
     {
-      _d(potentiometers[currentPotentiometerToUpdate]->name);
       potentiometersChanged = true;
       potentiometers[currentPotentiometerToUpdate]->changed();
     }

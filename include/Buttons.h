@@ -27,7 +27,9 @@ class AnalButtons
   public:
     AnalButtons();
     void update();
+    void begin();
     AnalButton *getButton(const uint8_t button_index);
+    bool isDown(const char *name);
     bool changed() { return (buttonsChanged); }
   private:
     AnalButton *buttons[ANAL_BUTTON_COUNT];

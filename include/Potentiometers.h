@@ -41,6 +41,7 @@ class AnalPotentiometers
 		void update();
 		AnalPotentiometer *getPot(const uint8_t potentiometerIndex);
 		bool changed() { return (potentiometersChanged); }
+		void begin();
 	private:
 		uint8_t currentPotentiometerToUpdate;
 		AnalPotentiometer *potentiometers[ANAL_POTENTIOMETER_COUNT];

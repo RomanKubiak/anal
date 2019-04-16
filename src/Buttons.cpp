@@ -13,7 +13,9 @@ const AnalPin analButtonPins[ANAL_BUTTON_COUNT] =
 };
 
 AnalButtons::AnalButtons() : 
-  currentButtonToUpdate(0), metro(Metro(ANAL_BUTTON_METRO_TIMER)), buttonsChanged(false)
+  currentButtonToUpdate(0), metro(Metro(ANAL_BUTTON_METRO_TIMER)), buttonsChanged(false){}
+
+void AnalButtons::begin()
 {
   for (int i=0; i<ANAL_BUTTON_COUNT; i++)
   {
@@ -26,6 +28,19 @@ AnalButton *AnalButtons::getButton(const uint8_t button_index)
   return buttons[button_index];
 }
 
+bool AnalButtons::isDown(const char *name)
+{
+  for (int i=0; i<ANAL_BUTTON_COUNT; i++)
+  {
+    if (strcmp(buttons[i]->name, name) == 0)
+    {
+      return (buttons[i]->readCurrentState() == false);
+    }
+  }
+
+  return (false);
+}
+
 void AnalButtons::update()
 {
   if (metro.check())
@@ -35,7 +50,6 @@ void AnalButtons::update()
 
     if (buttons[currentButtonToUpdate]->fell() || buttons[currentButtonToUpdate]->rose())
     {
-      _d(buttons[currentButtonToUpdate]->name);
       buttonsChanged = true;
     }
     else

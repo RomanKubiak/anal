@@ -1,6 +1,6 @@
 #ifndef _audio_input_channel_h
 #define _audio_input_channel_h
-
+#include "AudioMux.h"
 AudioMux inMuxL;
 AudioFilterStateVariable inFilterL;
 AudioMixer4              inMixerFilterL;
@@ -8,6 +8,7 @@ AudioEffectGranular      inGranularL;
 AudioSynthWaveform       inWaveformL;
 AudioEffectMultiply      inMultiplyL;
 
+#define GRANULAR_MEMORY_SIZE 44100
 AnalFilterDestination inFilterLWrapper(inFilterL);
 AnalMixer4Destination inMixerFilterLWrapper(inMixerFilterL);
 AnalSynthWaveformDestiation inWaveformLWrapper(inWaveformL);

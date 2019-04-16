@@ -1,43 +1,20 @@
 #include "ControllerLink.h"
 
-AnalValueSource::AnalValueSource()
-{
-	for (int i=0; i<MAX_DESTINATIONS_PER_SOURCE; i++)
-		links[i].dst = nullptr;
-}
-
 void AnalValueSource::changed()
 {
-	for (int i=0; i<MAX_DESTINATIONS_PER_SOURCE; i++)
+	if (linkActive)
 	{
-		if (links[i].dst)
-		{
-			if (links[i].active)
-			{
-				links[i].dst->setValueByIndex(this, links[i].idx, links[i].method);
-			}
-		}
+		destination->setValueByIndex(this, destinationParameterIndex, mapMethod);
 	}
-	AnalLinkManager::getInstance().sourceChanged(this);
 }
 
-AnalLinkManager::AnalLinkManager()
+void AnalValueSource::setLink(AnalValueDestination *dst, uint8_t idx, AnalLinkMapMethod method, bool active)
 {
+	destination = dst;
+	destinationParameterIndex = idx;
+	mapMethod = method;
+	linkActive = active;
 }
-
-void AnalLinkManager::sourceChanged(AnalValueSource *sourceThatChanged)
-{
-
-}
-
-void AnalLinkManager::setLink(AnalValueSource *src, AnalValueDestination *dst, uint8_t idx, AnalLinkMapMethod method, bool active)
-{
-	src->links[idx].dst = dst;
-	src->links[idx].idx = idx;
-	src->links[idx].method = method;
-	src->links[idx].active = active;
-}
-
 
 void AnalFilterDestination::setValueByIndex(AnalValueSource *src, const uint8_t idx, const AnalLinkMapMethod method)
 {

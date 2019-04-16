@@ -63,21 +63,16 @@ class AnalValueDestination
 class AnalValueSource
 {
 	public:
-		AnalValueSource();
+		AnalValueSource() {}
 		virtual const double getValue() = 0;
 		virtual const char *getName() = 0;
 		virtual const SourceValueType getType() = 0;
 		void changed();
-
-		struct Link
-		{
-			AnalValueDestination *dst;
-			uint8_t idx;
-			AnalLinkMapMethod method;
-			bool active;
-		};
-	
-		Link links[MAX_DESTINATIONS_PER_SOURCE];
+		void setLink(AnalValueDestination *dst, uint8_t idx, AnalLinkMapMethod method=unknownMethod, bool active=true);
+		AnalValueDestination *destination;
+		uint8_t destinationParameterIndex;
+		AnalLinkMapMethod mapMethod;
+		bool linkActive;
 };
 
 class AnalFilterDestination : public AnalValueDestination
@@ -113,10 +108,11 @@ class AnalSynthWaveformDestiation : public AnalValueDestination
 		AudioSynthWaveform &waveform;
 };
 
+/*
 class AnalLinkManager
 {
 	public:
-		AnalLinkManager();
+		AnalLinkManager() {}
 		AnalLinkManager(AnalLinkManager const&);
         void operator=(AnalLinkManager const&);
 		static AnalLinkManager& getInstance()
@@ -128,4 +124,5 @@ class AnalLinkManager
 		void sourceChanged(AnalValueSource *sourceThatChanged);
 		void setLink(AnalValueSource *src, AnalValueDestination *dst, uint8_t idx, AnalLinkMapMethod method=unknownMethod, bool active=true);
 };
+*/
 #endif

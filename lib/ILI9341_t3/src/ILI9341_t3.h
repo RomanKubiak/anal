@@ -186,6 +186,8 @@ class ILI9341_t3 : public Print
 	void begin(void);
   	void sleep(bool enable);		
 	void pushColor(uint16_t color);
+	void setColor(uint16_t color) { currentColor = color; }
+	int16_t getColor() { return (currentColor); }
 	void fillScreen(uint16_t color);
 	void drawPixel(int16_t x, int16_t y, uint16_t color);
 	void drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
@@ -287,6 +289,7 @@ class ILI9341_t3 : public Print
 	int16_t getCursorX(void) const { return cursor_x; }
 	int16_t getCursorY(void) const { return cursor_y; }
 	void setFont(const ILI9341_t3_font_t &f) { font = &f; }
+	const ILI9341_t3_font_t *getFont() { return (font); }
 	void setFontAdafruit(void) { font = NULL; }
 	void drawFontChar(unsigned int c);
 	int16_t strPixelLen(char * str);
@@ -312,6 +315,7 @@ class ILI9341_t3 : public Print
 		return sin(angle * DEG_TO_RAD);
 	}
  protected:
+ 	int16_t currentColor;
  	float _arcAngleMax;
 	int16_t _angleOffset;
 	int16_t _width, _height; // Display w/h as modified by current rotation
